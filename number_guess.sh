@@ -8,6 +8,10 @@ OUTPUT_SUCCESS(){
   echo "You guessed it in $1 tries. The secret number was $2. Nice job!"
 }
 
+GEN_RANDOM(){
+  echo $((1 + $RANDOM % 1000))
+}
+
 MAIN(){
   echo "Enter your username:"
   read NAME
