@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PSQL="psql --username=freecodecamp --dbname=<database_name> -t --no-align -c"
+PSQL="psql --username=freecodecamp --dbname=number_guess -t --no-align -c"
 
 OUTPUT_SUCCESS(){
   # <number_of_guesses>
@@ -15,6 +15,8 @@ GEN_RANDOM(){
 MAIN(){
   echo "Enter your username:"
   read NAME
+  DB_USER=$($PSQL "SELECT user_id,name FROM users WHERE name = '$NAME'")
+  echo $DB_USER
 }
 
 echo -e "\n~~ Number guessing game ~~\n"
