@@ -51,7 +51,4 @@ MAIN(){
 
   echo "You guessed it in $ATTEMPTS tries. The secret number was $SECRET_NUMBER. Nice job!"
 }
-
-echo -e "\n~~ Number guessing game ~~\n"
-
 MAIN
