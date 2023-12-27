@@ -19,7 +19,7 @@ MAIN(){
   if [[ -z $USER_ID ]]
   then
     INSERT_USER=$($PSQL "INSERT INTO users(name) VALUES('$NAME') RETURNING user_id")
-    USER_ID=$($INSERT_USER | cut -d' ' -f 1)
+    USER_ID=$(echo $INSERT_USER | cut -d' ' -f 1)
     echo "Welcome, $NAME! It looks like this is your first time here."
   else
     GAMES_PLAYED=$($PSQL "SELECT COUNT(game_id) FROM games WHERE user_id = $USER_ID")
@@ -38,7 +38,7 @@ MAIN(){
     if [[ ! $ANSWEAR =~ ^[0-9]+$ ]]
     then
       echo "That is not an integer, guess again:"
-    elif [[ $ANSWEAR < $SECRET_NUMBER ]]
+    elif (( $ANSWEAR < $SECRET_NUMBER ))
     then
       echo "It's higher than that, guess again:"
     else
