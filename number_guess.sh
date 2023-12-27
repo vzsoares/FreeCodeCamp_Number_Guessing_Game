@@ -23,13 +23,32 @@ MAIN(){
     echo "Welcome, $NAME! It looks like this is your first time here."
   else
     GAMES_PLAYED=$($PSQL "SELECT COUNT(game_id) FROM games WHERE user_id = $USER_ID")
-    BEST_GAME=$($PSQL "SELECT attempts FROM games WHERE user_id = $USER_ID ORDER BY attempts DESC LIMIT 1")
+    BEST_GAME=$($PSQL "SELECT attempts FROM games WHERE user_id = $USER_ID ORDER BY attempts ASC LIMIT 1")
     echo "Welcome back, $NAME! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."
   fi
   SECRET_NUMBER=$(GEN_RANDOM)
-  INSERT_GAME=$($PSQL "INSERT INTO games(secret_number,user_id) VALUES($SECRET_NUMBER, $USER_ID)")
+  INSERT_GAME=$($PSQL "INSERT INTO games(secret_number,user_id) VALUES($SECRET_NUMBER, $USER_ID) RETURNING game_id")
+  GAME_ID=$(echo $INSERT_GAME | cut -d' ' -f 1)
 
   echo "Guess the secret number between 1 and 1000:"
+
+  while [[ $ANSWEAR != $SECRET_NUMBER ]]
+  do
+    read ANSWEAR
+    if [[ ! $ANSWEAR =~ ^[0-9]+$ ]]
+    then
+      echo "That is not an integer, guess again:"
+    elif [[ $ANSWEAR < $SECRET_NUMBER ]]
+    then
+      echo "It's higher than that, guess again:"
+    else
+      echo "It's lower than that, guess again:"
+    fi
+    INCREASE_ATTEMPT=$($PSQL "UPDATE games SET attempts = attempts + 1 WHERE game_id = $GAME_ID ")
+  done
+  ATTEMPTS=$($PSQL "SELECT attempts FROM games WHERE game_id = $GAME_ID")
+
+  echo "You guessed it in $ATTEMPTS tries. The secret number was $SECRET_NUMBER. Nice job!"
 }
 
 echo -e "\n~~ Number guessing game ~~\n"
