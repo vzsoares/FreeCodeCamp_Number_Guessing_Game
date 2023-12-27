@@ -41,7 +41,8 @@ MAIN(){
     elif (( $ANSWEAR < $SECRET_NUMBER ))
     then
       echo "It's higher than that, guess again:"
-    else
+    elif (( $ANSWEAR > $SECRET_NUMBER ))
+    then
       echo "It's lower than that, guess again:"
     fi
     INCREASE_ATTEMPT=$($PSQL "UPDATE games SET attempts = attempts + 1 WHERE game_id = $GAME_ID ")
