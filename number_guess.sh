@@ -4,7 +4,7 @@ PSQL="psql --username=freecodecamp --dbname=number_guess -t --no-align -c"
 
 OUTPUT_SUCCESS(){
   # <number_of_guesses>
-  #<secret_number>
+  # <secret_number>
   echo "You guessed it in $1 tries. The secret number was $2. Nice job!"
 }
 
@@ -51,4 +51,7 @@ MAIN(){
 
   echo "You guessed it in $ATTEMPTS tries. The secret number was $SECRET_NUMBER. Nice job!"
 }
+
+echo -e "\n~~ Number guessing game ~~\n"
+
 MAIN
